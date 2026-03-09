@@ -8,6 +8,8 @@ import Offers from './pages/Offers';
 import Dining from './pages/Dining';
 import Rooms from './pages/Rooms';
 import RequestQuote from './pages/RequestQuote';
+import ThankYou from './pages/ThankYou';
+import SearchPage from './pages/Search';
 
 // Legal Pages
 import TermsOfService from './pages/legal/TermsOfService';
@@ -73,6 +75,8 @@ export default function App() {
             <Route path="/dining" element={<Dining resort={resort} />} />
             <Route path="/rooms" element={<Rooms resort={resort} />} />
             <Route path="/request-quote" element={<RequestQuote resort={resort} />} />
+            <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/search" element={<SearchPage resort={resort} />} />
             
             {/* Legal Routes */}
             <Route path="/terms" element={<TermsOfService />} />

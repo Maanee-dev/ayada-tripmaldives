@@ -7,7 +7,7 @@ export default function TermsOfService() {
       <div className="space-y-12">
         <section>
           <p className="text-sm text-stone-500 mb-8 italic">
-            TripMaldives is a division of Maldives Serenity Travels, a registered travel agency in the Maldives. All bookings, payments, and contracts are entered into directly with Maldives Serenity Travels. ayada.tripmaldives.com is an operating platform owned and managed by Maldives Serenity Travels.
+            TripMaldives is a division of Maldives Serenity Travels, a registered travel agency in the Maldives (License No: BP22342025). All bookings, payments, and contracts are entered into directly with Maldives Serenity Travels. ayada.tripmaldives.com is an operating platform owned and managed by Maldives Serenity Travels.
           </p>
         </section>
 
@@ -74,7 +74,7 @@ export default function TermsOfService() {
           <h2 className="text-2xl font-serif text-stone-900 mb-6">7. Governing Law & Dispute Resolution</h2>
           <div className="space-y-4">
             <p>These Terms of Service are governed by the laws of the Republic of Maldives. Any disputes arising from these terms or your booking shall be resolved in the courts of the Maldives or through arbitration in the Maldives.</p>
-            <p>Complaints should be directed to the Maldives Serenity Travels office in Addu City.</p>
+            <p>Complaints should be directed to the Maldives Serenity Travels office at FAITH, 19040, S. Feydhoo, Maldives.</p>
           </div>
         </section>
 

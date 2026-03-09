@@ -7,7 +7,7 @@ export default function PrivacyPolicy() {
       <div className="space-y-12">
         <section>
           <p className="text-sm text-stone-500 mb-8 italic">
-            Maldives Serenity Travels is the data controller for all information collected through ayada.tripmaldives.com. TripMaldives operates as a brand and platform under Maldives Serenity Travels' data protection registration.
+            Maldives Serenity Travels (Sole Proprietorship, Registry: SP02722025) is the data controller for all information collected through ayada.tripmaldives.com. TripMaldives operates as a brand and platform under Maldives Serenity Travels' data protection registration.
           </p>
         </section>
 
@@ -92,8 +92,8 @@ export default function PrivacyPolicy() {
         <section>
           <h2 className="text-2xl font-serif text-stone-900 mb-6">8. Contact Information</h2>
           <div className="space-y-4">
-            <p><strong>Data Protection Officer:</strong> Maldives Serenity Travels</p>
-            <p><strong>Address:</strong> Addu City, Republic of Maldives</p>
+            <p><strong>Data Protection Officer:</strong> Hussain Maanee Ali</p>
+            <p><strong>Address:</strong> FAITH, 19040, S. Feydhoo, Republic of Maldives</p>
             <p><strong>Email:</strong> privacy@maldives-serenitytravels.com</p>
           </div>
         </section>

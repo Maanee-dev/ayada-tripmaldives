@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Users, Home, Utensils, User, ChevronRight, ChevronLeft, CheckCircle2, Sparkles } from 'lucide-react';
+import { Calendar as CalendarIcon, Users, Home, Utensils, User, ChevronRight, ChevronLeft, CheckCircle2, Sparkles, Minus, Plus } from 'lucide-react';
+import { DayPicker } from 'react-day-picker';
+import { format, addDays, isBefore, startOfToday } from 'date-fns';
+import 'react-day-picker/dist/style.css';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
 
@@ -19,12 +22,11 @@ export default function RequestQuote({ resort }: RequestQuoteProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Quote Request:', formData);
-    alert("Thank you! Your quotation request has been received. A luxury specialist will contact you shortly.");
-    navigate('/');
+    navigate('/thank-you');
   };
 
   const steps = [
-    { id: 1, name: 'Dates', icon: Calendar },
+    { id: 1, name: 'Dates', icon: CalendarIcon },
     { id: 2, name: 'Guests', icon: Users },
     { id: 3, name: 'Room', icon: Home },
     { id: 4, name: 'Dining', icon: Utensils },
@@ -61,28 +63,49 @@ export default function RequestQuote({ resort }: RequestQuoteProps) {
                     <h2 className="text-3xl md:text-4xl font-serif mb-4">When would you like to visit?</h2>
                     <p className="text-stone-500 text-lg font-light">Select your preferred dates for an accurate quotation.</p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 mb-4">Check-in Date</label>
-                      <input 
-                        type="date" 
-                        className="w-full px-6 py-4 bg-stone-50 border border-stone-100 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none transition-all text-base"
-                        value={formData.checkIn}
-                        onChange={e => setFormData({...formData, checkIn: e.target.value})}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 mb-4">Check-out Date</label>
-                      <input 
-                        type="date" 
-                        className="w-full px-6 py-4 bg-stone-50 border border-stone-100 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none transition-all text-base"
-                        value={formData.checkOut}
-                        onChange={e => setFormData({...formData, checkOut: e.target.value})}
-                        required
-                      />
+                  
+                  <div className="flex flex-col lg:flex-row gap-12 items-start justify-center">
+                    <div className="flex-1 w-full">
+                      <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 mb-6 text-center lg:text-left">Check-in & Check-out</label>
+                      <div className="bg-stone-50 p-6 rounded-3xl border border-stone-100 flex justify-center">
+                        <DayPicker
+                          mode="range"
+                          selected={{
+                            from: formData.checkIn ? new Date(formData.checkIn) : undefined,
+                            to: formData.checkOut ? new Date(formData.checkOut) : undefined
+                          }}
+                          onSelect={(range) => {
+                            setFormData({
+                              ...formData,
+                              checkIn: range?.from ? format(range.from, 'yyyy-MM-dd') : '',
+                              checkOut: range?.to ? format(range.to, 'yyyy-MM-dd') : ''
+                            });
+                          }}
+                          disabled={{ before: startOfToday() }}
+                          numberOfMonths={window.innerWidth > 768 ? 2 : 1}
+                          className="luxury-datepicker"
+                          styles={{
+                            caption: { color: '#1c1917', fontFamily: 'serif' },
+                            head_cell: { color: '#a8a29e', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em' },
+                            day_selected: { backgroundColor: '#1c1917', color: 'white', borderRadius: '50%' },
+                            day_today: { color: '#10b981', fontWeight: 'bold' }
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-stone-50 p-6 rounded-2xl border border-stone-100">
+                      <p className="text-[9px] uppercase tracking-widest text-stone-400 font-bold mb-1">Check-in</p>
+                      <p className="text-lg font-serif">{formData.checkIn ? format(new Date(formData.checkIn), 'MMM dd, yyyy') : 'Select Date'}</p>
+                    </div>
+                    <div className="bg-stone-50 p-6 rounded-2xl border border-stone-100">
+                      <p className="text-[9px] uppercase tracking-widest text-stone-400 font-bold mb-1">Check-out</p>
+                      <p className="text-lg font-serif">{formData.checkOut ? format(new Date(formData.checkOut), 'MMM dd, yyyy') : 'Select Date'}</p>
+                    </div>
+                  </div>
+
                   <div className="flex justify-end pt-10">
                     <button 
                       type="button"
@@ -102,50 +125,50 @@ export default function RequestQuote({ resort }: RequestQuoteProps) {
                     <h2 className="text-3xl md:text-4xl font-serif mb-4">Who is traveling with you?</h2>
                     <p className="text-stone-500 text-lg font-light">This helps us recommend the best villa for your party.</p>
                   </div>
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between p-6 bg-stone-50 rounded-2xl border border-stone-100">
+                  <div className="space-y-6 max-w-md mx-auto md:mx-0">
+                    <div className="flex items-center justify-between p-8 bg-stone-50 rounded-[2.5rem] border border-stone-100 shadow-sm">
                       <div>
-                        <p className="font-bold text-lg mb-1">Adults</p>
-                        <p className="text-[9px] text-stone-400 uppercase tracking-[0.2em] font-bold">Ages 12+</p>
+                        <p className="font-bold text-2xl text-stone-900 mb-1">Adults</p>
+                        <p className="text-[10px] text-stone-400 uppercase tracking-[0.2em] font-bold">Ages 12+</p>
                       </div>
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-8">
                         <button 
                           type="button"
                           onClick={() => setFormData({...formData, adults: Math.max(1, formData.adults - 1)})}
-                          className="w-10 h-10 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-lg"
+                          className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-stone-400 hover:text-stone-900"
                         >
-                          -
+                          <Minus size={20} />
                         </button>
-                        <span className="text-xl font-bold w-6 text-center">{formData.adults}</span>
+                        <span className="text-3xl font-bold w-8 text-center text-stone-900">{formData.adults}</span>
                         <button 
                           type="button"
                           onClick={() => setFormData({...formData, adults: formData.adults + 1})}
-                          className="w-10 h-10 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-lg"
+                          className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-stone-400 hover:text-stone-900"
                         >
-                          +
+                          <Plus size={20} />
                         </button>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between p-6 bg-stone-50 rounded-2xl border border-stone-100">
+                    <div className="flex items-center justify-between p-8 bg-stone-50 rounded-[2.5rem] border border-stone-100 shadow-sm">
                       <div>
-                        <p className="font-bold text-lg mb-1">Children</p>
-                        <p className="text-[9px] text-stone-400 uppercase tracking-[0.2em] font-bold">Ages 0-11</p>
+                        <p className="font-bold text-2xl text-stone-900 mb-1">Children</p>
+                        <p className="text-[10px] text-stone-400 uppercase tracking-[0.2em] font-bold">Ages 0-11</p>
                       </div>
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-8">
                         <button 
                           type="button"
                           onClick={() => setFormData({...formData, children: Math.max(0, formData.children - 1)})}
-                          className="w-10 h-10 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-lg"
+                          className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-stone-400 hover:text-stone-900"
                         >
-                          -
+                          <Minus size={20} />
                         </button>
-                        <span className="text-xl font-bold w-6 text-center">{formData.children}</span>
+                        <span className="text-3xl font-bold w-8 text-center text-stone-900">{formData.children}</span>
                         <button 
                           type="button"
                           onClick={() => setFormData({...formData, children: formData.children + 1})}
-                          className="w-10 h-10 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-lg"
+                          className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center hover:bg-white hover:border-stone-900 transition-all text-stone-400 hover:text-stone-900"
                         >
-                          +
+                          <Plus size={20} />
                         </button>
                       </div>
                     </div>
@@ -313,22 +336,25 @@ export default function RequestQuote({ resort }: RequestQuoteProps) {
                       />
                     </div>
                   </div>
-                  <div className="flex justify-between pt-10">
+                  <div className="flex flex-col items-center gap-8 pt-10">
+                    <button 
+                      type="submit"
+                      className="w-full max-w-md bg-[#1c1917] text-white py-10 rounded-[2.5rem] font-bold uppercase tracking-[0.3em] text-sm hover:bg-stone-800 transition-all flex flex-col items-center justify-center gap-4 shadow-2xl shadow-stone-900/40 group relative overflow-hidden"
+                    >
+                      <span className="relative z-10">Request Private Quote</span>
+                      <Sparkles size={24} className="text-emerald-400 relative z-10 group-hover:scale-125 transition-transform" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    </button>
+                    
                     <button 
                       type="button"
                       onClick={handleBack}
                       className="text-stone-400 font-bold uppercase tracking-[0.2em] text-[9px] flex items-center gap-2 hover:text-stone-900 transition-colors"
                     >
-                      <ChevronLeft size={18} /> Back
-                    </button>
-                    <button 
-                      type="submit"
-                      className="bg-stone-900 text-white px-10 py-5 rounded-xl font-bold uppercase tracking-[0.2em] text-[10px] hover:bg-stone-800 transition-all flex items-center gap-3 shadow-xl shadow-stone-900/20"
-                    >
-                      Request Private Quote <Sparkles size={18} className="text-emerald-400" />
+                      <ChevronLeft size={18} /> Back to Details
                     </button>
                   </div>
-                  <p className="text-[10px] text-stone-400 text-center uppercase tracking-[0.2em] font-bold">
+                  <p className="text-[10px] text-stone-400 text-center uppercase tracking-[0.2em] font-bold mt-8">
                     By clicking, you agree to be contacted by a Serenity Travels specialist.
                   </p>
                 </div>
@@ -344,7 +370,7 @@ export default function RequestQuote({ resort }: RequestQuoteProps) {
               <h3 className="text-2xl font-serif mb-8 border-b border-white/10 pb-6">Your Selection</h3>
               <div className="space-y-8">
                 <div className="flex items-start gap-4">
-                  <Calendar className="text-emerald-400 mt-1" size={20} />
+                  <CalendarIcon className="text-emerald-400 mt-1" size={20} />
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold mb-1">Stay Period</p>
                     <p className="text-sm font-medium">{formData.checkIn || 'Not selected'} — {formData.checkOut || 'Not selected'}</p>

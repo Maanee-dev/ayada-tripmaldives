@@ -42,9 +42,11 @@ export default function Layout({ children, resort }: LayoutProps) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    setIsSearchOpen(false);
-    setSearchQuery('');
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery('');
+    }
   };
 
   const acceptCookies = () => {
@@ -109,7 +111,12 @@ export default function Layout({ children, resort }: LayoutProps) {
             >
               <MessageCircle size={16} /> WhatsApp
             </a>
-            <button className="hidden sm:block hover:text-stone-900 transition-colors">$ USD</button>
+            <Link 
+              to="/request-quote"
+              className="hidden lg:flex bg-stone-900 text-white px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-stone-800 transition-all shadow-lg shadow-stone-900/20"
+            >
+              Request for Quote
+            </Link>
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2 bg-stone-100 rounded-full text-stone-900 hover:bg-stone-200 transition-colors"
@@ -163,22 +170,25 @@ export default function Layout({ children, resort }: LayoutProps) {
                     setIsMenuOpen(false);
                     setIsSearchOpen(true);
                   }}
-                  className="flex items-center gap-2 text-stone-400"
+                  className="flex items-center gap-2 text-stone-900 font-bold"
                 >
-                  <Search size={14} /> Search
+                  <Search size={18} /> Search
                 </button>
                 <a 
                   href="https://wa.me/9607771234" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-emerald-500"
+                  className="flex items-center gap-2 text-emerald-500 font-bold"
                 >
-                  <MessageCircle size={14} /> WhatsApp
+                  <MessageCircle size={18} /> WhatsApp
                 </a>
-                <div className="flex gap-8">
-                  <button className="text-stone-400">$ USD</button>
-                  <button className="text-stone-400">EN</button>
-                </div>
+                <Link 
+                  to="/request-quote"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="w-full bg-stone-900 text-white py-4 rounded-xl text-center font-bold uppercase tracking-widest text-[10px]"
+                >
+                  Request for Quote
+                </Link>
               </div>
             </nav>
           </div>
