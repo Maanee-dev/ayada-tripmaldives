@@ -96,20 +96,22 @@ export default function Layout({ children, resort }: LayoutProps) {
             <span className="text-[7px] md:text-[9px] uppercase tracking-[0.2em] text-stone-400 font-medium -mt-1">A Maldives Serenity Travels Experience</span>
           </Link>
           
-          <div className="flex items-center gap-3 md:gap-6 text-[11px] uppercase tracking-[0.2em] font-bold text-stone-400">
+          <div className="flex items-center gap-2 md:gap-4">
             <button 
               onClick={() => setIsSearchOpen(true)}
-              className="hidden sm:flex items-center gap-2 hover:text-stone-900 transition-colors"
+              className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-900 transition-all"
+              aria-label="Search"
             >
-              <Search size={14} /> Search
+              <Search size={18} />
             </button>
             <a 
               href="https://wa.me/9607771234" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2 text-emerald-500 hover:text-emerald-600 transition-colors"
+              className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full hover:bg-emerald-50 text-emerald-500 hover:text-emerald-600 transition-all"
+              aria-label="WhatsApp"
             >
-              <MessageCircle size={16} /> WhatsApp
+              <MessageCircle size={20} />
             </a>
             <Link 
               to="/request-quote"
