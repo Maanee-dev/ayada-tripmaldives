@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronRight, Calendar, Users, Info, Utensils, Phone, ShieldCheck, Clock, Search, MessageCircle } from 'lucide-react';
+import { Menu, X, ChevronRight, ChevronDown, Calendar, Users, Info, Utensils, Phone, ShieldCheck, Clock, Search, MessageCircle } from 'lucide-react';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
 import ChatBot from './ChatBot';
@@ -12,6 +12,7 @@ interface LayoutProps {
 
 export default function Layout({ children, resort }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isActivitiesOpen, setIsActivitiesOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showCookieBanner, setShowCookieBanner] = useState(() => {
     return !localStorage.getItem('cookieConsent');
@@ -55,10 +56,28 @@ export default function Layout({ children, resort }: LayoutProps) {
   };
 
   const navLinks = [
-    { name: 'Experiences', path: '/experiences' },
     { name: 'Offers', path: '/offers' },
     { name: 'Dining', path: '/dining' },
     { name: 'Rooms', path: '/rooms' },
+    { 
+      name: 'Activities', 
+      path: '#',
+      subLinks: [
+        { name: 'Excursions', path: '/activities/excursions' },
+        { name: 'Watersports', path: '/activities/watersports' },
+        { name: 'Diving', path: '/activities/diving' },
+        { name: 'Sports & Recreation', path: '/activities/sports-recreation' },
+        { name: 'Secret Garden', path: '/activities/secret-garden' },
+        { name: 'Zuzuu Kids Club', path: '/activities/zuzuu-kids-club' },
+        { name: 'Environmental Initiatives', path: '/activities/environmental-initiatives' },
+        { name: 'Exotic Animals', path: '/activities/exotic-animals' },
+        { name: 'Resort Clinic', path: '/activities/resort-clinic' },
+      ]
+    },
+    { name: 'All Inclusive', path: '/all-inclusive' },
+    { name: 'AySpa', path: '/ayspa' },
+    { name: 'Weddings', path: '/weddings' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -66,35 +85,56 @@ export default function Layout({ children, resort }: LayoutProps) {
       {/* Header */}
       <header className="sticky top-0 w-full z-50 bg-white border-b border-stone-100">
         <div className="w-full px-6 md:px-12 lg:px-16 h-16 md:h-20 flex items-center justify-between">
-          <div className="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-bold text-stone-400">
-            {navLinks.map(link => (
-              <Link 
-                key={link.path} 
-                to={link.path} 
-                className={`hover:text-stone-900 transition-colors ${location.pathname === link.path ? 'text-stone-900' : ''}`}
+          <div className="flex items-center gap-8 xl:gap-12">
+            <Link to="/" className="flex flex-col items-center group shrink-0">
+              <svg 
+                version="1.0" 
+                xmlns="http://www.w3.org/2000/svg"
+                width="50px" 
+                height="34px" 
+                viewBox="0 0 600.000000 395.000000"
+                preserveAspectRatio="xMidYMid meet"
+                className="text-stone-900 group-hover:text-emerald-600 transition-colors"
               >
-                {link.name}
-              </Link>
-            ))}
+                <g transform="translate(0.000000,395.000000) scale(0.050000,-0.050000)" fill="currentColor" stroke="none">
+                  <path d="M3950 6733 c-197 -90 -362 -406 -630 -1216 -252 -756 -412 -1048 -770 -1397 -337 -329 -378 -480 -128 -480 440 0 829 550 1257 1780 245 704 359 879 466 715 47 -73 134 -554 136 -751 3 -387 187 -896 367 -1012 266 -172 570 -21 940 467 329 433 390 413 474 -156 183 -1234 446 -1388 1344 -787 379 255 446 254 776 -7 357 -282 524 -316 1067 -219 358 64 489 64 667 0 200 -72 283 -48 178 52 -149 141 -381 178 -806 128 -529 -62 -637 -36 -978 240 -436 352 -562 352 -1099 -8 -565 -377 -740 -240 -861 673 -83 635 -138 789 -306 859 -192 80 -341 -31 -674 -504 -501 -713 -603 -620 -767 700 -89 720 -336 1068 -653 923z"/>
+                  <path d="M8868 5159 c-257 -99 -407 -346 -287 -475 169 -181 439 94 439 447 0 80 -11 82 -152 28z"/>
+                </g>
+              </svg>
+            </Link>
+
+            <div className="hidden lg:flex items-center gap-4 xl:gap-6 text-[10px] uppercase tracking-[0.1em] font-bold text-stone-400">
+              {navLinks.map(link => (
+                link.subLinks ? (
+                  <div key={link.name} className="relative group py-4">
+                    <button className="flex items-center gap-1 hover:text-stone-900 transition-colors uppercase tracking-[0.1em]">
+                      {link.name}
+                      <ChevronDown size={10} className="group-hover:rotate-180 transition-transform duration-300" />
+                    </button>
+                    <div className="absolute top-full left-0 w-56 bg-white border border-stone-100 shadow-xl rounded-xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                      {link.subLinks.map(sub => (
+                        <Link
+                          key={sub.path}
+                          to={sub.path}
+                          className="block px-5 py-2 text-[9px] hover:bg-stone-50 hover:text-stone-900 transition-colors"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link 
+                    key={link.path} 
+                    to={link.path} 
+                    className={`hover:text-stone-900 transition-colors whitespace-nowrap ${location.pathname === link.path ? 'text-stone-900' : ''}`}
+                  >
+                    {link.name}
+                  </Link>
+                )
+              ))}
+            </div>
           </div>
-          
-          <Link to="/" className="lg:absolute lg:left-1/2 lg:-translate-x-1/2 flex flex-col items-center group">
-            <svg 
-              version="1.0" 
-              xmlns="http://www.w3.org/2000/svg"
-              width="60px" 
-              height="40px" 
-              viewBox="0 0 600.000000 395.000000"
-              preserveAspectRatio="xMidYMid meet"
-              className="text-stone-900 group-hover:text-emerald-600 transition-colors"
-            >
-              <g transform="translate(0.000000,395.000000) scale(0.050000,-0.050000)" fill="currentColor" stroke="none">
-                <path d="M3950 6733 c-197 -90 -362 -406 -630 -1216 -252 -756 -412 -1048 -770 -1397 -337 -329 -378 -480 -128 -480 440 0 829 550 1257 1780 245 704 359 879 466 715 47 -73 134 -554 136 -751 3 -387 187 -896 367 -1012 266 -172 570 -21 940 467 329 433 390 413 474 -156 183 -1234 446 -1388 1344 -787 379 255 446 254 776 -7 357 -282 524 -316 1067 -219 358 64 489 64 667 0 200 -72 283 -48 178 52 -149 141 -381 178 -806 128 -529 -62 -637 -36 -978 240 -436 352 -562 352 -1099 -8 -565 -377 -740 -240 -861 673 -83 635 -138 789 -306 859 -192 80 -341 -31 -674 -504 -501 -713 -603 -620 -767 700 -89 720 -336 1068 -653 923z"/>
-                <path d="M8868 5159 c-257 -99 -407 -346 -287 -475 169 -181 439 94 439 447 0 80 -11 82 -152 28z"/>
-              </g>
-            </svg>
-            <span className="text-[7px] md:text-[9px] uppercase tracking-[0.2em] text-stone-400 font-medium -mt-1">A Maldives Serenity Travels Experience</span>
-          </Link>
           
           <div className="flex items-center gap-2 md:gap-4">
             <button 
@@ -154,17 +194,43 @@ export default function Layout({ children, resort }: LayoutProps) {
 
         {/* Mobile Menu Overlay */}
         {isMenuOpen && (
-          <div className="lg:hidden absolute top-16 md:top-20 left-0 w-full bg-white border-b border-stone-100 shadow-xl animate-in slide-in-from-top-4 duration-300 z-40">
+          <div className="lg:hidden absolute top-16 md:top-20 left-0 w-full bg-white border-b border-stone-100 shadow-xl animate-in slide-in-from-top-4 duration-300 z-40 overflow-y-auto max-h-[calc(100vh-5rem)]">
             <nav className="flex flex-col p-8 gap-6 text-sm uppercase tracking-[0.2em] font-bold text-stone-600">
               {navLinks.map(link => (
-                <Link 
-                  key={link.path} 
-                  to={link.path} 
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`hover:text-stone-900 transition-colors ${location.pathname === link.path ? 'text-stone-900' : ''}`}
-                >
-                  {link.name}
-                </Link>
+                link.subLinks ? (
+                  <div key={link.name} className="flex flex-col gap-4">
+                    <button 
+                      onClick={() => setIsActivitiesOpen(!isActivitiesOpen)}
+                      className="flex items-center justify-between w-full hover:text-stone-900 transition-colors"
+                    >
+                      {link.name}
+                      <ChevronDown size={18} className={`transition-transform duration-300 ${isActivitiesOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isActivitiesOpen && (
+                      <div className="flex flex-col gap-4 pl-4 border-l border-stone-100 animate-in slide-in-from-top-2 duration-300">
+                        {link.subLinks.map(sub => (
+                          <Link
+                            key={sub.path}
+                            to={sub.path}
+                            onClick={() => setIsMenuOpen(false)}
+                            className="text-xs text-stone-400 hover:text-stone-900 transition-colors"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    ) }
+                  </div>
+                ) : (
+                  <Link 
+                    key={link.path} 
+                    to={link.path} 
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`hover:text-stone-900 transition-colors ${location.pathname === link.path ? 'text-stone-900' : ''}`}
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
               <div className="pt-6 border-t border-stone-100 flex flex-col gap-4">
                 <button 

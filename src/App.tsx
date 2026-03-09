@@ -10,6 +10,21 @@ import Rooms from './pages/Rooms';
 import RequestQuote from './pages/RequestQuote';
 import ThankYou from './pages/ThankYou';
 import SearchPage from './pages/Search';
+import AllInclusive from './pages/AllInclusive';
+import AySpa from './pages/AySpa';
+import Weddings from './pages/Weddings';
+import Contact from './pages/Contact';
+
+// Activity Pages
+import Excursions from './pages/activities/Excursions';
+import Watersports from './pages/activities/Watersports';
+import Diving from './pages/activities/Diving';
+import SportsRecreation from './pages/activities/SportsRecreation';
+import SecretGarden from './pages/activities/SecretGarden';
+import KidsClub from './pages/activities/KidsClub';
+import Environmental from './pages/activities/Environmental';
+import ExoticAnimals from './pages/activities/ExoticAnimals';
+import Clinic from './pages/activities/Clinic';
 
 // Legal Pages
 import TermsOfService from './pages/legal/TermsOfService';
@@ -77,6 +92,22 @@ export default function App() {
             <Route path="/request-quote" element={<RequestQuote resort={resort} />} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/search" element={<SearchPage resort={resort} />} />
+            
+            <Route path="/all-inclusive" element={<AllInclusive resort={resort} />} />
+            <Route path="/ayspa" element={<AySpa resort={resort} />} />
+            <Route path="/weddings" element={<Weddings resort={resort} />} />
+            <Route path="/contact" element={<Contact resort={resort} />} />
+
+            {/* Activity Routes */}
+            <Route path="/activities/excursions" element={<Excursions resort={resort} />} />
+            <Route path="/activities/watersports" element={<Watersports resort={resort} />} />
+            <Route path="/activities/diving" element={<Diving resort={resort} />} />
+            <Route path="/activities/sports-recreation" element={<SportsRecreation resort={resort} />} />
+            <Route path="/activities/secret-garden" element={<SecretGarden resort={resort} />} />
+            <Route path="/activities/zuzuu-kids-club" element={<KidsClub resort={resort} />} />
+            <Route path="/activities/environmental-initiatives" element={<Environmental resort={resort} />} />
+            <Route path="/activities/exotic-animals" element={<ExoticAnimals resort={resort} />} />
+            <Route path="/activities/resort-clinic" element={<Clinic resort={resort} />} />
             
             {/* Legal Routes */}
             <Route path="/terms" element={<TermsOfService />} />
