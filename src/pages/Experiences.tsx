@@ -1,5 +1,6 @@
 import React from 'react';
-import { CheckCircle2, Waves, Sparkles, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { CheckCircle2, Waves, Sparkles, ChevronRight, Star, Compass, Camera, Heart } from 'lucide-react';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
 
@@ -9,55 +10,82 @@ interface ExperiencesProps {
 
 export default function Experiences({ resort }: ExperiencesProps) {
   const { setShowForm } = useForm();
+  const navigate = useNavigate();
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-12 text-center">
-        <h1 className="text-5xl font-serif mb-4">Island Experiences</h1>
-        <p className="text-stone-400 uppercase tracking-[0.2em] text-xs font-bold">Unforgettable Moments at {resort.name}</p>
+    <>
+      {/* Full Width Hero Section */}
+      <div className="relative h-[60vh] md:h-[80vh] overflow-hidden mb-12 md:mb-20">
+        <img 
+          src={resort.images[3]} 
+          className="w-full h-full object-cover" 
+          alt="Experiences at Ayada" 
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-stone-900/40 flex flex-col justify-end p-6 md:p-16 lg:p-24">
+          <div className="max-w-7xl mx-auto w-full">
+            <p className="text-emerald-400 uppercase tracking-[0.4em] text-[10px] md:text-xs font-bold mb-4 flex items-center gap-3">
+              <Sparkles size={18} /> Curated Adventures
+            </p>
+            <h1 className="text-4xl md:text-7xl lg:text-9xl font-serif text-white mb-6 leading-[0.9] tracking-tighter">Beyond the Horizon</h1>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
-        <div className="space-y-8">
-          <h2 className="text-3xl font-serif">Curated Activities</h2>
-          <div className="space-y-6">
-            {resort.features.map((feature, i) => (
-              <div key={i} className="flex gap-4 p-6 bg-stone-50 rounded-2xl border border-stone-100 hover:border-stone-900 transition-colors">
-                <div className="text-stone-900 mt-1"><CheckCircle2 size={20} /></div>
-                <div>
-                  <p className="font-bold text-sm">{feature}</p>
-                </div>
+      <div className="w-full">
+        {/* Experiences List - Minimalistic */}
+      <div className="mb-32">
+        <div className="max-w-2xl mb-16">
+          <h2 className="text-3xl md:text-5xl font-serif mb-6">Island Adventures</h2>
+          <p className="text-stone-500 text-lg font-light leading-relaxed">Each experience at {resort.name} is meticulously designed to immerse you in the natural beauty and vibrant culture of the Maldives.</p>
+        </div>
+
+        <div className="space-y-24">
+          {resort.features.map((feature, i) => (
+            <div key={i} className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
+              <div className={`w-full lg:w-1/2 aspect-[16/10] overflow-hidden rounded-xl ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+                <img 
+                  src={resort.images[(i % 3) + 1]} 
+                  className="w-full h-full object-cover" 
+                  alt={feature} 
+                  referrerPolicy="no-referrer" 
+                />
               </div>
-            ))}
-          </div>
-        </div>
-        
-        <div className="relative rounded-3xl overflow-hidden h-[600px]">
-          <img 
-            src={resort.images[2]} 
-            className="w-full h-full object-cover" 
-            alt="Experience" 
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 to-transparent flex flex-col justify-end p-8 text-white">
-            <p className="text-xs uppercase tracking-widest font-bold mb-2 text-emerald-400">Signature Experience</p>
-            <h3 className="text-2xl font-serif mb-4">Sunset Dhoni Cruise</h3>
-            <p className="text-sm text-stone-300 leading-relaxed">Sail into the golden hour on a traditional Maldivian boat, accompanied by dolphins and refreshing cocktails.</p>
-          </div>
+              <div className={`w-full lg:w-1/2 ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-4 py-1.5 rounded-full">
+                    Signature Experience
+                  </div>
+                </div>
+                <h3 className="text-3xl md:text-5xl font-serif mb-6 leading-tight">{feature}</h3>
+                <p className="text-stone-500 text-lg leading-relaxed mb-10 font-light">Experience the ultimate Maldivian luxury with our curated {feature.toLowerCase()} activities, designed for those who seek both adventure and tranquility.</p>
+                <button 
+                  onClick={() => navigate('/request-quote')}
+                  className="bg-stone-900 text-white px-10 py-5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-stone-800 transition-all shadow-lg shadow-stone-900/10"
+                >
+                  Explore Experience
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="bg-stone-900 text-white p-12 rounded-[3rem] text-center">
-        <Sparkles className="mx-auto mb-6 text-emerald-400" size={40} />
-        <h2 className="text-3xl font-serif mb-4">Ready for Adventure?</h2>
-        <p className="text-stone-400 mb-8 max-w-xl mx-auto">Our concierge team is ready to personalize your stay with exclusive excursions and private events.</p>
-        <button 
-          onClick={() => setShowForm(true)}
-          className="bg-white text-stone-900 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-sm hover:bg-stone-100 transition-colors"
-        >
-          Inquire About Activities
-        </button>
+      {/* Final CTA Section */}
+      <div className="bg-stone-50 rounded-2xl p-8 md:p-12 lg:p-24 mb-20 text-center">
+        <div className="max-w-2xl mx-auto">
+          <p className="text-emerald-600 uppercase tracking-[0.3em] text-[10px] font-bold mb-6">Create Your Story</p>
+          <h2 className="text-3xl md:text-5xl font-serif mb-8 leading-tight">Ready for Adventure?</h2>
+          <p className="text-stone-500 text-lg mb-12 leading-relaxed font-light">Let our island specialists curate a personalized itinerary of experiences tailored to your interests.</p>
+          <button 
+            onClick={() => navigate('/request-quote')}
+            className="bg-stone-900 text-white px-12 py-5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-stone-800 transition-all shadow-xl shadow-stone-900/20"
+          >
+            Start Planning
+          </button>
+        </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

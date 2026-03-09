@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight, Calendar, Users, Info, Utensils, Phone, ShieldCheck, Clock } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, ChevronRight, Calendar, Users, Info, Utensils, Phone, ShieldCheck, Clock, Search, MessageCircle } from 'lucide-react';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
+import ChatBot from './ChatBot';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,9 +12,15 @@ interface LayoutProps {
 
 export default function Layout({ children, resort }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showCookieBanner, setShowCookieBanner] = useState(() => {
+    return !localStorage.getItem('cookieConsent');
+  });
+  const [searchQuery, setSearchQuery] = useState('');
   const { showForm, setShowForm } = useForm();
   const [formStep, setFormStep] = useState(1);
   const location = useLocation();
+  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -33,6 +40,18 @@ export default function Layout({ children, resort }: LayoutProps) {
     setFormStep(1);
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Searching for:', searchQuery);
+    setIsSearchOpen(false);
+    setSearchQuery('');
+  };
+
+  const acceptCookies = () => {
+    localStorage.setItem('cookieConsent', 'true');
+    setShowCookieBanner(false);
+  };
+
   const navLinks = [
     { name: 'Experiences', path: '/experiences' },
     { name: 'Offers', path: '/offers' },
@@ -44,7 +63,7 @@ export default function Layout({ children, resort }: LayoutProps) {
     <div className="min-h-screen bg-white text-stone-900 font-sans selection:bg-emerald-100">
       {/* Header */}
       <header className="sticky top-0 w-full z-50 bg-white border-b border-stone-100">
-        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+        <div className="w-full px-6 md:px-12 lg:px-16 h-16 md:h-20 flex items-center justify-between">
           <div className="hidden lg:flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-bold text-stone-400">
             {navLinks.map(link => (
               <Link 
@@ -57,27 +76,76 @@ export default function Layout({ children, resort }: LayoutProps) {
             ))}
           </div>
           
-          <Link to="/" className="lg:absolute lg:left-1/2 lg:-translate-x-1/2 flex flex-col items-center">
-            <span className="text-xl md:text-2xl font-bold tracking-tighter text-stone-900">TRIPMALDIVES</span>
-            <span className="text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-stone-400 font-medium -mt-1">A Maldives Serenity Travels Experience</span>
+          <Link to="/" className="lg:absolute lg:left-1/2 lg:-translate-x-1/2 flex flex-col items-center group">
+            <svg 
+              version="1.0" 
+              xmlns="http://www.w3.org/2000/svg"
+              width="60px" 
+              height="40px" 
+              viewBox="0 0 600.000000 395.000000"
+              preserveAspectRatio="xMidYMid meet"
+              className="text-stone-900 group-hover:text-emerald-600 transition-colors"
+            >
+              <g transform="translate(0.000000,395.000000) scale(0.050000,-0.050000)" fill="currentColor" stroke="none">
+                <path d="M3950 6733 c-197 -90 -362 -406 -630 -1216 -252 -756 -412 -1048 -770 -1397 -337 -329 -378 -480 -128 -480 440 0 829 550 1257 1780 245 704 359 879 466 715 47 -73 134 -554 136 -751 3 -387 187 -896 367 -1012 266 -172 570 -21 940 467 329 433 390 413 474 -156 183 -1234 446 -1388 1344 -787 379 255 446 254 776 -7 357 -282 524 -316 1067 -219 358 64 489 64 667 0 200 -72 283 -48 178 52 -149 141 -381 178 -806 128 -529 -62 -637 -36 -978 240 -436 352 -562 352 -1099 -8 -565 -377 -740 -240 -861 673 -83 635 -138 789 -306 859 -192 80 -341 -31 -674 -504 -501 -713 -603 -620 -767 700 -89 720 -336 1068 -653 923z"/>
+                <path d="M8868 5159 c-257 -99 -407 -346 -287 -475 169 -181 439 94 439 447 0 80 -11 82 -152 28z"/>
+              </g>
+            </svg>
+            <span className="text-[7px] md:text-[9px] uppercase tracking-[0.2em] text-stone-400 font-medium -mt-1">A Maldives Serenity Travels Experience</span>
           </Link>
           
-          <div className="flex items-center gap-4 md:gap-6 text-[11px] uppercase tracking-[0.2em] font-bold text-stone-400">
-            <button className="hidden sm:flex items-center gap-2 hover:text-stone-900 transition-colors"><X size={14} className="rotate-45" /> Search</button>
+          <div className="flex items-center gap-3 md:gap-6 text-[11px] uppercase tracking-[0.2em] font-bold text-stone-400">
+            <button 
+              onClick={() => setIsSearchOpen(true)}
+              className="hidden sm:flex items-center gap-2 hover:text-stone-900 transition-colors"
+            >
+              <Search size={14} /> Search
+            </button>
+            <a 
+              href="https://wa.me/9607771234" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2 text-emerald-500 hover:text-emerald-600 transition-colors"
+            >
+              <MessageCircle size={16} /> WhatsApp
+            </a>
             <button className="hidden sm:block hover:text-stone-900 transition-colors">$ USD</button>
-            <button className="hidden sm:block hover:text-stone-900 transition-colors">EN</button>
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 bg-stone-100 rounded-full text-stone-900 hover:bg-stone-200 transition-colors"
+              className="lg:hidden p-2 bg-stone-100 rounded-full text-stone-900 hover:bg-stone-200 transition-colors"
             >
               {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
 
+        {/* Search Overlay */}
+        {isSearchOpen && (
+          <div className="absolute inset-0 bg-white z-[60] flex items-center px-4 animate-in fade-in duration-300">
+            <form onSubmit={handleSearch} className="max-w-3xl mx-auto w-full flex items-center gap-4">
+              <Search size={24} className="text-stone-400" />
+              <input 
+                autoFocus
+                type="text" 
+                placeholder="Search experiences, villas, or offers..." 
+                className="flex-1 bg-transparent border-none outline-none text-xl md:text-3xl font-serif placeholder:text-stone-200"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+              <button 
+                type="button"
+                onClick={() => setIsSearchOpen(false)}
+                className="p-2 hover:bg-stone-100 rounded-full transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </form>
+          </div>
+        )}
+
         {/* Mobile Menu Overlay */}
         {isMenuOpen && (
-          <div className="lg:hidden absolute top-20 left-0 w-full bg-white border-b border-stone-100 shadow-xl animate-in slide-in-from-top-4 duration-300 z-40">
+          <div className="lg:hidden absolute top-16 md:top-20 left-0 w-full bg-white border-b border-stone-100 shadow-xl animate-in slide-in-from-top-4 duration-300 z-40">
             <nav className="flex flex-col p-8 gap-6 text-sm uppercase tracking-[0.2em] font-bold text-stone-600">
               {navLinks.map(link => (
                 <Link 
@@ -90,7 +158,23 @@ export default function Layout({ children, resort }: LayoutProps) {
                 </Link>
               ))}
               <div className="pt-6 border-t border-stone-100 flex flex-col gap-4">
-                <button className="flex items-center gap-2 text-stone-400"><X size={14} className="rotate-45" /> Search</button>
+                <button 
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsSearchOpen(true);
+                  }}
+                  className="flex items-center gap-2 text-stone-400"
+                >
+                  <Search size={14} /> Search
+                </button>
+                <a 
+                  href="https://wa.me/9607771234" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-emerald-500"
+                >
+                  <MessageCircle size={14} /> WhatsApp
+                </a>
                 <div className="flex gap-8">
                   <button className="text-stone-400">$ USD</button>
                   <button className="text-stone-400">EN</button>
@@ -101,27 +185,74 @@ export default function Layout({ children, resort }: LayoutProps) {
         )}
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-12">
+      <main className="w-full px-6 md:px-12 lg:px-16 py-16 md:py-24">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="bg-stone-50 border-t border-stone-100 py-12 mt-24">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold mb-4">TripMaldives Performance Brand</p>
-          <p className="text-xs text-stone-500 max-w-2xl mx-auto leading-relaxed">
-            TripMaldives is a performance brand of Maldives Serenity Travels. All bookings, payments, and travel arrangements are legally processed and managed by Maldives Serenity Travels (License No: MST-2024-ADDU), Addu City, Maldives.
-          </p>
+      <footer className="bg-stone-50 border-t border-stone-100 py-16 mt-24">
+        <div className="w-full px-6 md:px-12 lg:px-16">
+          <div className="flex flex-col items-center text-center mb-12">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 font-bold mb-4">Maldives Serenity Travels Experience</p>
+            <p className="text-xs text-stone-500 max-w-2xl mx-auto leading-relaxed mb-8">
+              All bookings, payments, and travel arrangements are legally processed and managed by Maldives Serenity Travels (License No: MST-2024-ADDU), Addu City, Maldives.
+            </p>
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-[10px] uppercase tracking-widest font-bold text-stone-400">
+              <Link to="/terms" className="hover:text-stone-900 transition-colors">Terms of Service</Link>
+              <Link to="/privacy" className="hover:text-stone-900 transition-colors">Privacy Policy</Link>
+              <Link to="/cancellation-policy" className="hover:text-stone-900 transition-colors">Cancellation & Refund</Link>
+              <Link to="/booking-conditions" className="hover:text-stone-900 transition-colors">Booking Conditions</Link>
+              <Link to="/cookie-policy" className="hover:text-stone-900 transition-colors">Cookie Policy</Link>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-stone-100 text-center">
+            <p className="text-[9px] text-stone-300 uppercase tracking-[0.2em]">© {new Date().getFullYear()} Maldives Serenity Travels. All rights reserved.</p>
+          </div>
         </div>
       </footer>
 
+      <ChatBot />
+
+      {/* Cookie Banner */}
+      {showCookieBanner && (
+        <div className="fixed bottom-20 md:bottom-8 left-4 right-4 md:left-auto md:right-8 md:max-w-md z-[100] animate-in slide-in-from-bottom-8 duration-500">
+          <div className="bg-white rounded-2xl p-6 shadow-2xl border border-stone-100">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
+                <ShieldCheck size={20} />
+              </div>
+              <div>
+                <h4 className="font-bold text-sm text-stone-900 mb-1">Cookie Consent</h4>
+                <p className="text-xs text-stone-500 leading-relaxed">
+                  We use cookies to enhance your booking experience. By continuing, you consent to our use of essential and analytics cookies.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button 
+                onClick={acceptCookies}
+                className="flex-1 bg-stone-900 text-white py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-stone-800 transition-all"
+              >
+                Accept All
+              </button>
+              <Link 
+                to="/cookie-policy"
+                className="flex-1 bg-stone-100 text-stone-600 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-stone-200 transition-all text-center"
+              >
+                Customize
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Sticky CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full p-4 z-50 bg-white/80 backdrop-blur-lg border-t border-stone-200">
+      <div className="md:hidden fixed bottom-0 left-0 w-full p-4 z-50 bg-white/95 backdrop-blur-xl border-t border-stone-100">
         <button 
-          onClick={() => setShowForm(true)}
-          className="w-full bg-stone-900 text-white py-4 rounded-xl font-bold shadow-xl shadow-stone-900/20"
+          onClick={() => navigate('/request-quote')}
+          className="w-full bg-stone-900 text-white py-4 rounded-xl font-bold uppercase tracking-[0.2em] text-[10px] shadow-xl shadow-stone-900/20 active:scale-[0.98] transition-all"
         >
-          Request Quotation
+          Request Private Quotation
         </button>
       </div>
 
@@ -133,19 +264,19 @@ export default function Layout({ children, resort }: LayoutProps) {
             className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm animate-in fade-in duration-300"
           />
           <div 
-            className="relative bg-white w-full max-w-lg rounded-[2rem] overflow-hidden shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-300"
+            className="relative bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 max-h-[90vh] flex flex-col"
           >
-            <div className="bg-stone-900 p-8 text-white">
+            <div className="bg-stone-900 p-6 md:p-8 text-white shrink-0">
               <button 
                 onClick={() => setShowForm(false)}
-                className="absolute top-6 right-6 text-white/60 hover:text-white"
+                className="absolute top-4 right-4 md:top-6 md:right-6 text-white/60 hover:text-white"
               >
                 <X size={24} />
               </button>
-              <h3 className="text-2xl font-serif mb-2">Request Quotation</h3>
-              <p className="text-stone-400 text-sm">Step {formStep} of 3: {formStep === 1 ? 'Stay Details' : formStep === 2 ? 'Guest Info' : 'Contact Details'}</p>
+              <h3 className="text-xl md:text-2xl font-serif mb-1 md:mb-2">Request Quotation</h3>
+              <p className="text-stone-400 text-[10px] md:text-sm">Step {formStep} of 3: {formStep === 1 ? 'Stay Details' : formStep === 2 ? 'Guest Info' : 'Contact Details'}</p>
               
-              <div className="mt-6 h-1 w-full bg-white/20 rounded-full overflow-hidden">
+              <div className="mt-4 md:mt-6 h-1 w-full bg-white/20 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-white transition-all duration-500" 
                   style={{ width: `${(formStep / 3) * 100}%` }}
@@ -153,7 +284,7 @@ export default function Layout({ children, resort }: LayoutProps) {
               </div>
             </div>
 
-            <form onSubmit={handleFormSubmit} className="p-8">
+            <form onSubmit={handleFormSubmit} className="p-6 md:p-8 overflow-y-auto">
               {formStep === 1 && (
                 <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
                   <div>
@@ -163,7 +294,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                       <input 
                         type="text" 
                         placeholder="e.g. Oct 2024" 
-                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
+                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
                         value={formData.dates}
                         onChange={e => setFormData({...formData, dates: e.target.value})}
                         required
@@ -175,7 +306,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <div className="relative">
                       <Users className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
                       <select 
-                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none appearance-none"
+                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none appearance-none"
                         value={formData.guests}
                         onChange={e => setFormData({...formData, guests: e.target.value})}
                       >
@@ -191,7 +322,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <div className="relative">
                       <Info className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
                       <select 
-                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none appearance-none"
+                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none appearance-none"
                         value={formData.roomType}
                         onChange={e => setFormData({...formData, roomType: e.target.value})}
                         required
@@ -208,7 +339,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <div className="relative">
                       <Utensils className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" size={18} />
                       <select 
-                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none appearance-none"
+                        className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none appearance-none"
                         value={formData.mealPlan}
                         onChange={e => setFormData({...formData, mealPlan: e.target.value})}
                         required
@@ -229,7 +360,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                         alert("Please fill in all fields.");
                       }
                     }}
-                    className="w-full bg-stone-900 text-white py-4 rounded-2xl font-bold hover:bg-stone-800 transition-colors"
+                    className="w-full bg-stone-900 text-white py-4 rounded-xl font-bold hover:bg-stone-800 transition-colors"
                   >
                     Continue
                   </button>
@@ -243,7 +374,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <input 
                       type="text" 
                       placeholder="John Doe" 
-                      className="w-full px-6 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
+                      className="w-full px-6 py-4 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
                       value={formData.name}
                       onChange={e => setFormData({...formData, name: e.target.value})}
                       required
@@ -253,14 +384,14 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <button 
                       type="button"
                       onClick={() => setFormStep(1)}
-                      className="flex-1 border border-stone-200 py-4 rounded-2xl font-bold hover:bg-stone-50 transition-colors"
+                      className="flex-1 border border-stone-200 py-4 rounded-xl font-bold hover:bg-stone-50 transition-colors"
                     >
                       Back
                     </button>
                     <button 
                       type="button"
                       onClick={() => setFormStep(3)}
-                      className="flex-[2] bg-stone-900 text-white py-4 rounded-2xl font-bold hover:bg-stone-800 transition-colors"
+                      className="flex-[2] bg-stone-900 text-white py-4 rounded-xl font-bold hover:bg-stone-800 transition-colors"
                     >
                       Continue
                     </button>
@@ -275,7 +406,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <input 
                       type="email" 
                       placeholder="john@example.com" 
-                      className="w-full px-6 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
+                      className="w-full px-6 py-4 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
                       value={formData.email}
                       onChange={e => setFormData({...formData, email: e.target.value})}
                       required
@@ -286,7 +417,7 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <input 
                       type="tel" 
                       placeholder="+1 (555) 000-0000" 
-                      className="w-full px-6 py-4 bg-stone-50 border border-stone-200 rounded-2xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
+                      className="w-full px-6 py-4 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-stone-900 focus:border-transparent outline-none"
                       value={formData.phone}
                       onChange={e => setFormData({...formData, phone: e.target.value})}
                       required
@@ -296,13 +427,13 @@ export default function Layout({ children, resort }: LayoutProps) {
                     <button 
                       type="button"
                       onClick={() => setFormStep(2)}
-                      className="flex-1 border border-stone-200 py-4 rounded-2xl font-bold hover:bg-stone-50 transition-colors"
+                      className="flex-1 border border-stone-200 py-4 rounded-xl font-bold hover:bg-stone-50 transition-colors"
                     >
                       Back
                     </button>
                     <button 
                       type="submit"
-                      className="flex-[2] bg-stone-900 text-white py-4 rounded-2xl font-bold hover:bg-stone-800 transition-colors shadow-xl shadow-stone-900/20"
+                      className="flex-[2] bg-stone-900 text-white py-4 rounded-xl font-bold hover:bg-stone-800 transition-colors shadow-xl shadow-stone-900/20"
                     >
                       Request Private Quote
                     </button>

@@ -7,6 +7,14 @@ import Experiences from './pages/Experiences';
 import Offers from './pages/Offers';
 import Dining from './pages/Dining';
 import Rooms from './pages/Rooms';
+import RequestQuote from './pages/RequestQuote';
+
+// Legal Pages
+import TermsOfService from './pages/legal/TermsOfService';
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import CancellationPolicy from './pages/legal/CancellationPolicy';
+import BookingConditions from './pages/legal/BookingConditions';
+import CookiePolicy from './pages/legal/CookiePolicy';
 
 import { FormProvider } from './context/FormContext';
 
@@ -64,6 +72,15 @@ export default function App() {
             <Route path="/offers" element={<Offers resort={resort} />} />
             <Route path="/dining" element={<Dining resort={resort} />} />
             <Route path="/rooms" element={<Rooms resort={resort} />} />
+            <Route path="/request-quote" element={<RequestQuote resort={resort} />} />
+            
+            {/* Legal Routes */}
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/cancellation-policy" element={<CancellationPolicy />} />
+            <Route path="/booking-conditions" element={<BookingConditions />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>
