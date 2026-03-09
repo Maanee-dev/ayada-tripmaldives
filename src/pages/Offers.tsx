@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Waves, Sparkles, Gift, Plane, ChevronRight, Clock, Tag, Info, CheckCircle2, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Waves, Gift, Plane, ChevronRight, Clock, Tag, Info, CheckCircle2, ArrowLeft, ArrowRight } from 'lucide-react';
 import { ResortData, Offer, supabase } from '../types';
 import { useForm } from '../context/FormContext';
 

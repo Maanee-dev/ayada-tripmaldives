@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, Waves, Sparkles, Menu, ChevronRight, ShieldCheck, Clock, MapPin } from 'lucide-react';
+import { Star, Waves, Share2, Menu, ChevronRight, ShieldCheck, Clock, MapPin, Gift } from 'lucide-react';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
 
@@ -35,7 +35,7 @@ export default function Home({ resort }: HomeProps) {
               <Waves size={18} /> Save
             </button>
             <button className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest hover:bg-stone-50 px-4 py-2 rounded-lg transition-all">
-              <Sparkles size={18} /> Share
+              <Share2 size={18} /> Share
             </button>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function Home({ resort }: HomeProps) {
 
             <div className="p-6 bg-white rounded-xl mb-8 border border-stone-100">
               <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-2 flex items-center gap-2">
-                <Sparkles size={14} /> Exclusive Benefit
+                <Gift size={14} /> Exclusive Benefit
               </p>
               <p className="text-xs font-medium text-stone-600 leading-relaxed">Complimentary 24-Hour Butler Service included with all bookings through TripMaldives.</p>
             </div>

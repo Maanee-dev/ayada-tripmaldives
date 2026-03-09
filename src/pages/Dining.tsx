@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Utensils, Star, Waves, ChevronRight, Clock, MapPin, Sparkles, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Utensils, Star, Waves, ChevronRight, Clock, MapPin, Award, ArrowLeft, ArrowRight } from 'lucide-react';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
 
@@ -35,7 +35,7 @@ export default function Dining({ resort }: DiningProps) {
         <div className="absolute inset-0 bg-stone-900/40 flex flex-col justify-end p-6 md:p-16 lg:p-24">
           <div className="max-w-7xl mx-auto w-full">
             <p className="text-emerald-400 uppercase tracking-[0.4em] text-[10px] md:text-xs font-bold mb-4 flex items-center gap-3">
-              <Sparkles size={18} /> Epicurean Excellence
+              <Award size={18} /> Epicurean Excellence
             </p>
             <h1 className="text-4xl md:text-7xl lg:text-9xl font-serif text-white mb-6 leading-[0.9] tracking-tighter">A Culinary Journey</h1>
           </div>

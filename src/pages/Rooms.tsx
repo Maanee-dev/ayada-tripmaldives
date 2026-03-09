@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Waves, Maximize, Users, ChevronRight, Star, Sparkles, ShieldCheck, Coffee, Wind, X, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Waves, Maximize, Users, ChevronRight, Star, UserCheck, ShieldCheck, Coffee, Wind, X, ArrowRight, ArrowLeft } from 'lucide-react';
 import { ResortData, RoomType } from '../types';
 import { useForm } from '../context/FormContext';
 
@@ -75,7 +75,7 @@ export default function Rooms({ resort }: RoomsProps) {
             <ShieldCheck size={16} className="text-emerald-500" /> Private Pool
           </div>
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
-            <Sparkles size={16} className="text-emerald-500" /> Butler Service
+            <UserCheck size={16} className="text-emerald-500" /> Butler Service
           </div>
         </div>
       </div>
@@ -207,7 +207,7 @@ export default function Rooms({ resort }: RoomsProps) {
                       <ShieldCheck size={16} className="text-emerald-500" /> Private Pool
                     </div>
                     <div className="flex items-center gap-2 text-xs text-stone-500">
-                      <Sparkles size={16} className="text-emerald-500" /> Butler Service
+                      <UserCheck size={16} className="text-emerald-500" /> Butler Service
                     </div>
                     <div className="flex items-center gap-2 text-xs text-stone-500">
                       <Coffee size={16} className="text-emerald-500" /> Nespresso Machine

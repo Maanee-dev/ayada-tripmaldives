@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, Home, Calendar, MessageCircle, Sparkles } from 'lucide-react';
+import { CheckCircle2, Home, Calendar, MessageCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export default function ThankYou() {
@@ -67,9 +67,7 @@ export default function ThankYou() {
         </div>
 
         <div className="mt-20 flex items-center justify-center gap-2 text-stone-300">
-          <Sparkles size={16} />
           <span className="text-[10px] uppercase tracking-[0.3em] font-bold">A Maldives Serenity Travels Experience</span>
-          <Sparkles size={16} />
         </div>
       </motion.div>
     </div>

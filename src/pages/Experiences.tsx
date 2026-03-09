@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, Waves, Sparkles, ChevronRight, Star, Compass, Camera, Heart } from 'lucide-react';
+import { CheckCircle2, Waves, ChevronRight, Star, Compass, Camera, Heart } from 'lucide-react';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
 
@@ -25,7 +25,7 @@ export default function Experiences({ resort }: ExperiencesProps) {
         <div className="absolute inset-0 bg-stone-900/40 flex flex-col justify-end p-6 md:p-16 lg:p-24">
           <div className="max-w-7xl mx-auto w-full">
             <p className="text-emerald-400 uppercase tracking-[0.4em] text-[10px] md:text-xs font-bold mb-4 flex items-center gap-3">
-              <Sparkles size={18} /> Curated Adventures
+              <Compass size={18} /> Curated Adventures
             </p>
             <h1 className="text-4xl md:text-7xl lg:text-9xl font-serif text-white mb-6 leading-[0.9] tracking-tighter">Beyond the Horizon</h1>
           </div>
