@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ResortData, supabase } from './types';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -73,8 +73,11 @@ export default function App() {
 
   if (!resort) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <p className="text-stone-900 font-serif text-xl">Resort not found.</p>
+      <div className="min-h-screen flex items-center justify-center bg-white p-6 text-center">
+        <div>
+          <p className="text-stone-900 font-serif text-xl mb-4">Resort not found.</p>
+          <p className="text-stone-500 text-sm">Please check your connection or try again later.</p>
+        </div>
       </div>
     );
   }
