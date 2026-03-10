@@ -1,5 +1,5 @@
 import React from 'react';
-import { Waves, Wind, Zap, Anchor, CheckCircle2, Star } from 'lucide-react';
+import { CheckCircle2, FileText, Download, Info, Waves, Wind, Zap, Anchor, Camera, Ship, Car } from 'lucide-react';
 import { ResortData } from '../../types';
 
 interface WatersportsProps {
@@ -7,71 +7,239 @@ interface WatersportsProps {
 }
 
 export default function Watersports({ resort }: WatersportsProps) {
-  const activities = [
+  const watersports = [
     {
-      title: "Kayaking",
-      description: "Explore the crystal-clear lagoon at your own pace.",
-      icon: Waves
-    },
-    {
-      title: "Windsurfing",
-      description: "Harness the power of the wind for an exhilarating experience.",
-      icon: Wind
-    },
-    {
-      title: "Jet Skiing",
-      description: "Speed through the waves on a high-powered jet ski.",
+      id: 'efoil',
+      name: 'E-foil',
+      description: 'Glide through our pristine lagoons with a fast e-foil — the perfect board for experienced adventure seekers and new users alike. Beginner, Experienced and even 3-day courses are available.',
+      image: 'https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&q=80&w=1000',
+      category: 'Motorized',
+      duration: '30/60 Mins',
       icon: Zap
     },
     {
-      title: "Paddleboarding",
-      description: "A peaceful way to enjoy the beauty of the Maldivian waters.",
+      id: 'parasailing',
+      name: 'Parasailing',
+      description: 'Enjoy the thrill of parasailing, and see our tropical island from a new perspective. We offer single, tandem and private parasailing both during daytime and at sunset.',
+      image: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=1000',
+      category: 'Aerial',
+      duration: '15 Mins',
+      icon: Wind
+    },
+    {
+      id: 'jetcar',
+      name: 'Jet Car',
+      description: "Glide over the turquoise waters in this sleek, sports-car-inspired marvel, merging luxury with adventure for an unforgettable ride. Make waves in style and turn heads as you cruise through paradise—an exhilarating highlight of Ayada's exclusive experiences.",
+      image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&q=80&w=1000',
+      category: 'Exclusive',
+      duration: '20/40 Mins',
+      icon: Car
+    },
+    {
+      id: 'jetski',
+      name: 'Jet Ski',
+      description: 'Discover the fun and excitement of riding a jet ski at Indian Ocean. We provide a unique Jet Ski hire experience through amazing waterways under the safe guidance of friendly, experienced staff.',
+      image: 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=1000',
+      category: 'Motorized',
+      duration: '30/60 Mins',
+      icon: Zap
+    },
+    {
+      id: 'funtube',
+      name: 'Fun Tube',
+      description: 'For those who like a little more speed and adventure - then it’s the Fun tube ride. This adventure makes for great memories for holiday experiences. Tubing is the equivalent of rollercoaster ride of our beautiful Indian ocean.',
+      image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=1000',
+      category: 'Towed',
+      duration: '15 Mins',
+      icon: Waves
+    },
+    {
+      id: 'wakeboarding',
+      name: 'Wakeboarding',
+      description: 'Carve up the water and ride the wake behind our luxury speedboat complete with air towers .Our professional instructors make wakeboarding fun and easy to learn for all, no matter what your skill level.',
+      image: 'https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&q=80&w=1000',
+      category: 'Towed',
+      duration: '20 Mins',
       icon: Anchor
+    },
+    {
+      id: 'sunset-cruise',
+      name: 'Sunset Cruise',
+      description: 'Embark on a spectacular and romantic Sunset Cruise, to see the island from the ocean. It’s a fantastic opportunity for breath-taking photos. This excursion is available on Wednesday, Thursday, Saturday and Sunday.',
+      image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=1000',
+      category: 'Excursion',
+      duration: '1 Hour',
+      icon: Ship
+    },
+    {
+      id: 'snorkeling',
+      name: 'Snorkeling',
+      description: "You'll love snorkeling - the crystal blue waters of the Indian ocean are legendary. Combined with the blue skies and sunshine and some of the finest coral reefs on Maldives.",
+      image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=1000',
+      category: 'Nature',
+      duration: '1.5 Hours',
+      icon: Camera
+    }
+  ];
+
+  const priceListData = [
+    {
+      category: "MOTORIZED WATER SPORTS",
+      items: [
+        { name: "Jet Ski Safari", price: "$195", inclusive: "30 Mins" },
+        { name: "Jet Ski Ride", price: "$120", inclusive: "15 Mins" },
+        { name: "Jet Car Experience", price: "$250", inclusive: "20 Mins" },
+        { name: "E-Foil Lesson", price: "$180", inclusive: "45 Mins" },
+        { name: "Parasailing Single", price: "$150", inclusive: "15 Mins" },
+        { name: "Parasailing Tandem", price: "$280", inclusive: "15 Mins" },
+      ]
+    },
+    {
+      category: "TOWED & NON-MOTORIZED",
+      items: [
+        { name: "Fun Tube Ride", price: "$60/pp", inclusive: "15 Mins (Min 2 pax)" },
+        { name: "Wakeboarding / Water Ski", price: "$85", inclusive: "20 Mins" },
+        { name: "Wakeboarding Lesson", price: "$110", inclusive: "30 Mins" },
+        { name: "Glass Bottom Kayak", price: "$45", inclusive: "60 Mins" },
+        { name: "Stand Up Paddleboard", price: "Complimentary", inclusive: "60 Mins" },
+        { name: "Windsurfing", price: "Complimentary", inclusive: "60 Mins (License req.)" },
+      ]
     }
   ];
 
   return (
     <div className="animate-in fade-in duration-700">
       {/* Hero Section */}
-      <div className="relative h-[60vh] md:h-[70vh] -mx-6 md:-mx-12 lg:-mx-16 -mt-16 md:-mt-24 mb-16 md:mb-24 overflow-hidden">
+      <div className="relative h-[50vh] md:h-[70vh] -mx-6 md:-mx-12 lg:-mx-16 -mt-16 md:-mt-24 mb-12 md:mb-20 overflow-hidden">
         <img 
           src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=2000" 
           className="w-full h-full object-cover"
           alt="Watersports Maldives"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-stone-900/40 flex flex-col justify-end p-6 md:p-16 lg:p-24">
+        <div className="absolute inset-0 bg-stone-900/40 flex flex-col justify-end p-8 md:p-16 lg:p-24">
           <div className="max-w-7xl mx-auto w-full">
             <p className="text-emerald-400 uppercase tracking-[0.4em] text-[10px] md:text-xs font-bold mb-4">Aquatic Thrills</p>
-            <h1 className="text-4xl md:text-7xl lg:text-9xl font-serif text-white mb-6 leading-[0.9] tracking-tighter">Watersports</h1>
+            <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif text-white mb-6 leading-[0.85] tracking-tighter">Watersports</h1>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center mb-24">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-serif mb-8 leading-tight">Adventure on the Water</h2>
-            <p className="text-stone-500 text-lg font-light leading-relaxed mb-8">
-              Whether you're looking for a peaceful paddle or a high-speed thrill, our watersports center offers a wide range of activities for all skill levels.
-            </p>
-            <div className="space-y-4">
-              {['Complimentary Non-Motorized', 'Professional Instructors', 'Top-Quality Equipment', 'Safety First Approach'].map((item) => (
-                <div key={item} className="flex items-center gap-3 text-stone-900 font-medium">
-                  <CheckCircle2 className="text-emerald-500" size={20} />
-                  <span className="text-sm uppercase tracking-widest">{item}</span>
+      <div className="max-w-7xl mx-auto px-4 md:px-0">
+        <div className="mb-20">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-12 md:mb-16">
+            <div className="max-w-3xl">
+              <h2 className="text-4xl md:text-6xl font-serif mb-6 leading-tight text-stone-900">Adventure on the Water</h2>
+              <p className="text-stone-600 text-base md:text-lg font-light leading-relaxed">
+                Whether you're looking for a peaceful paddle or a high-speed thrill, our watersports center offers a wide range of activities for all skill levels. From complimentary non-motorized equipment to exclusive jet car experiences, we have something for every adventurer.
+              </p>
+            </div>
+            <button className="w-full lg:w-auto flex items-center justify-center gap-3 bg-stone-900 text-white px-8 py-5 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-stone-800 transition-all shadow-xl shadow-stone-900/20 shrink-0">
+              <Download size={18} /> Download Price List
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 mb-20 md:mb-32">
+            {watersports.map((item) => (
+              <div key={item.id} className="bg-white rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 overflow-hidden group hover:shadow-2xl transition-all duration-500 flex flex-col">
+                <div className="aspect-[4/3] overflow-hidden relative">
+                  <img 
+                    src={item.image} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                    alt={item.name} 
+                    referrerPolicy="no-referrer" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+                <div className="p-6 md:p-10 flex-1 flex flex-col">
+                  <div className="flex items-center gap-3 mb-3 md:mb-4">
+                    <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-2.5 md:px-3 py-1 rounded-full">
+                      {item.category}
+                    </span>
+                    <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-stone-400">
+                      {item.duration}
+                    </span>
+                  </div>
+                  <h4 className="font-serif text-2xl md:text-3xl mb-3 md:mb-4 text-stone-900">{item.name}</h4>
+                  <p className="text-stone-600 text-sm font-light leading-relaxed mb-6 md:mb-8 flex-1">
+                    {item.description}
+                  </p>
+                  <div className="flex gap-3">
+                    <button className="flex-1 py-4 md:py-5 bg-stone-900 text-white rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-bold uppercase tracking-widest hover:bg-stone-800 transition-all duration-300">
+                      Book it
+                    </button>
+                    {item.id === 'jetcar' && (
+                      <button className="px-6 py-4 md:py-5 bg-stone-100 text-stone-900 rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-bold uppercase tracking-widest hover:bg-stone-200 transition-all duration-300">
+                        Prices
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Price List Section */}
+          <div className="bg-stone-900 rounded-[2rem] md:rounded-[4rem] p-6 md:p-20 text-white shadow-2xl">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12 md:mb-16">
+              <div className="flex items-center gap-4 md:gap-6">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-white/10 backdrop-blur-md rounded-2xl md:rounded-3xl flex items-center justify-center text-white shrink-0">
+                  <FileText size={24} className="md:w-8 md:h-8" />
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-5xl font-serif">Watersports Prices</h3>
+                  <p className="text-stone-400 text-[10px] md:text-xs uppercase tracking-[0.3em] font-bold mt-1 md:mt-2">Official Rates & Inclusions</p>
+                </div>
+              </div>
+              <button className="w-full md:w-auto flex items-center justify-center gap-3 bg-white text-stone-900 px-8 md:px-10 py-4 md:py-5 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-stone-100 transition-all shadow-xl shadow-white/10">
+                <Download size={18} /> Save as PDF
+              </button>
+            </div>
+
+            <div className="space-y-12 md:space-y-20">
+              {priceListData.map((section) => (
+                <div key={section.category}>
+                  <h4 className="text-emerald-400 font-bold text-xs md:text-sm uppercase tracking-[0.4em] mb-6 md:mb-10 border-b border-white/10 pb-4 md:pb-6">
+                    {section.category}
+                  </h4>
+                  <div className="overflow-x-auto -mx-2 px-2">
+                    <table className="w-full text-left min-w-[500px] md:min-w-0">
+                      <thead>
+                        <tr className="text-[10px] md:text-[11px] uppercase tracking-widest text-stone-500 font-bold">
+                          <th className="pb-4 md:pb-6 pr-4 md:pr-6">Activity</th>
+                          <th className="pb-4 md:pb-6 pr-4 md:pr-6">USD</th>
+                          <th className="pb-4 md:pb-6">Inclusive</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {section.items.map((item, idx) => (
+                          <tr key={idx} className="group hover:bg-white/5 transition-colors">
+                            <td className="py-4 md:py-6 pr-4 md:pr-6 text-sm md:text-base font-medium text-white">{item.name}</td>
+                            <td className="py-4 md:py-6 pr-4 md:pr-6 text-sm md:text-base font-bold text-white">{item.price}</td>
+                            <td className="py-4 md:py-6 text-xs md:text-sm text-stone-400 font-light leading-relaxed">{item.inclusive}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {activities.map((item, index) => (
-              <div key={index} className="bg-stone-50 p-8 rounded-2xl border border-stone-100 hover:shadow-xl transition-all group">
-                <item.icon className="text-emerald-600 mb-6 group-hover:scale-110 transition-transform" size={32} />
-                <h4 className="font-serif text-xl mb-3">{item.title}</h4>
-                <p className="text-stone-500 text-sm font-light leading-relaxed">{item.description}</p>
+
+            <div className="mt-16 md:mt-24 pt-8 md:pt-12 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+              <div className="flex gap-4 md:gap-5">
+                <Info className="text-emerald-400 shrink-0 md:w-6 md:h-6" size={20} />
+                <p className="text-[10px] md:text-xs text-stone-400 leading-relaxed uppercase tracking-widest font-medium">
+                  All activities are subject to weather conditions. Prices are in USD and subject to 10% service charge & 17% GST (Government Tax).
+                </p>
               </div>
-            ))}
+              <div className="flex gap-4 md:gap-5">
+                <Info className="text-emerald-400 shrink-0 md:w-6 md:h-6" size={20} />
+                <p className="text-[10px] md:text-xs text-stone-400 leading-relaxed uppercase tracking-widest font-medium">
+                  Cancellation policy: Please inform the water sports centre before 18:00 of the prior evening. Late cancellations incur a 50% fee.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

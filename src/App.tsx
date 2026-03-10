@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ResortData, supabase } from './types';
+import { ayadaData } from './data';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Experiences from './pages/Experiences';
@@ -36,7 +37,7 @@ import CookiePolicy from './pages/legal/CookiePolicy';
 import { FormProvider } from './context/FormContext';
 
 export default function App() {
-  const [resort, setResort] = useState<ResortData | null>(null);
+  const [resort, setResort] = useState<ResortData | null>(ayadaData);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,9 +50,12 @@ export default function App() {
           .single();
 
         if (error) throw error;
-        setResort(data);
+        // Merge Supabase data with our detailed local data
+        setResort({ ...ayadaData, ...data });
       } catch (err) {
         console.error('Error fetching resort:', err);
+        // Fallback to local data if Supabase fails
+        setResort(ayadaData);
       } finally {
         setLoading(false);
       }

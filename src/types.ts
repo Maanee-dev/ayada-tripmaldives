@@ -42,6 +42,36 @@ export interface Offer {
   created_at: string;
 }
 
+export interface Activity {
+  id: string;
+  name: string;
+  category: 'Excursion' | 'Watersport' | 'Diving' | 'Sports' | 'Kids' | 'Nature' | 'Wellness';
+  image: string;
+  description: string;
+  details: string[];
+  priceRange?: string;
+  duration?: string;
+}
+
+export interface SpaTreatment {
+  id: string;
+  name: string;
+  category: string;
+  duration: string;
+  description: string;
+  benefits: string[];
+  image: string;
+}
+
+export interface WeddingPackage {
+  id: string;
+  name: string;
+  description: string;
+  inclusions: string[];
+  image: string;
+  price?: string;
+}
+
 export interface ResortData {
   id: string;
   name: string;
@@ -58,4 +88,7 @@ export interface ResortData {
   uvp: string;
   room_types: RoomType[];
   dining_venues: DiningVenue[];
+  activities?: Activity[];
+  spa_treatments?: SpaTreatment[];
+  wedding_packages?: WeddingPackage[];
 }

@@ -325,12 +325,21 @@ export default function Layout({ children, resort }: LayoutProps) {
       )}
 
       {/* Mobile Sticky CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full p-4 z-50 bg-white/95 backdrop-blur-xl border-t border-stone-100">
+      <div className="md:hidden fixed bottom-0 left-0 w-full p-4 z-50 bg-white/95 backdrop-blur-xl border-t border-stone-100 flex gap-3">
+        <a 
+          href="https://wa.me/9607771234" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex-1 bg-emerald-500 text-white py-4 rounded-xl font-bold uppercase tracking-[0.1em] text-[10px] shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+        >
+          <MessageCircle size={16} />
+          WhatsApp
+        </a>
         <button 
           onClick={() => navigate('/request-quote')}
-          className="w-full bg-stone-900 text-white py-4 rounded-xl font-bold uppercase tracking-[0.2em] text-[10px] shadow-xl shadow-stone-900/20 active:scale-[0.98] transition-all"
+          className="flex-[2] bg-stone-900 text-white py-4 rounded-xl font-bold uppercase tracking-[0.1em] text-[10px] shadow-xl shadow-stone-900/20 active:scale-[0.98] transition-all"
         >
-          Request Private Quotation
+          Request Quote
         </button>
       </div>
 
