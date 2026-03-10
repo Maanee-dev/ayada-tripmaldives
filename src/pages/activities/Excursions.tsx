@@ -1,13 +1,24 @@
 import React from 'react';
-import { CheckCircle2, FileText, Download, Info } from 'lucide-react';
+import { CheckCircle2, FileText, Download, Info, ShoppingBag } from 'lucide-react';
 import { ResortData } from '../../types';
+import { useInquiry } from '../../context/InquiryContext';
 
 interface ExcursionsProps {
   resort: ResortData;
 }
 
 export default function Excursions({ resort }: ExcursionsProps) {
+  const { addItem } = useInquiry();
   const excursions = resort.activities?.filter(a => a.category === 'Excursion' || a.category === 'Nature') || [];
+
+  const handleAddToInquiry = (item: any) => {
+    addItem({
+      id: `excursion-${item.name.toLowerCase().replace(/\s+/g, '-')}`,
+      category: 'Excursions',
+      name: item.name,
+      price: item.priceRange || item.price,
+    });
+  };
 
   const priceListData = [
     {
@@ -113,9 +124,18 @@ export default function Excursions({ resort }: ExcursionsProps) {
                       </div>
                     ))}
                   </div>
-                  <button className="w-full py-4 md:py-5 bg-stone-50 rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-stone-900 hover:bg-stone-900 hover:text-white transition-all duration-300">
-                    Inquire for Details
-                  </button>
+                  <div className="flex gap-3">
+                    <button className="flex-1 py-4 md:py-5 bg-stone-50 rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-stone-900 hover:bg-stone-100 transition-all duration-300">
+                      Inquire
+                    </button>
+                    <button 
+                      onClick={() => handleAddToInquiry(item)}
+                      className="flex-1 py-4 md:py-5 bg-emerald-600 rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-white hover:bg-emerald-700 transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <ShoppingBag size={14} />
+                      Add
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -150,7 +170,8 @@ export default function Excursions({ resort }: ExcursionsProps) {
                         <tr className="text-[10px] md:text-[11px] uppercase tracking-widest text-stone-500 font-bold">
                           <th className="pb-4 md:pb-6 pr-4 md:pr-6">Activity</th>
                           <th className="pb-4 md:pb-6 pr-4 md:pr-6">USD</th>
-                          <th className="pb-4 md:pb-6">Inclusive</th>
+                          <th className="pb-4 md:pb-6 pr-4 md:pr-6">Inclusive</th>
+                          <th className="pb-4 md:pb-6">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-white/5">
@@ -158,7 +179,16 @@ export default function Excursions({ resort }: ExcursionsProps) {
                           <tr key={idx} className="group hover:bg-white/5 transition-colors">
                             <td className="py-4 md:py-6 pr-4 md:pr-6 text-sm md:text-base font-medium text-white">{item.name}</td>
                             <td className="py-4 md:py-6 pr-4 md:pr-6 text-sm md:text-base font-bold text-white">{item.price}</td>
-                            <td className="py-4 md:py-6 text-xs md:text-sm text-stone-400 font-light leading-relaxed">{item.inclusive}</td>
+                            <td className="py-4 md:py-6 pr-4 md:pr-6 text-xs md:text-sm text-stone-400 font-light leading-relaxed">{item.inclusive}</td>
+                            <td className="py-4 md:py-6">
+                              <button 
+                                onClick={() => handleAddToInquiry(item)}
+                                className="p-2 bg-white/10 text-white hover:bg-emerald-600 rounded-full transition-all"
+                                title="Add to Inquiry"
+                              >
+                                <ShoppingBag size={16} />
+                              </button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>

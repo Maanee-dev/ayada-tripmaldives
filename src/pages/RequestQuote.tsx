@@ -14,15 +14,35 @@ interface RequestQuoteProps {
 export default function RequestQuote({ resort }: RequestQuoteProps) {
   const { formData, setFormData } = useForm();
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleNext = () => setStep(s => s + 1);
   const handleBack = () => setStep(s => s - 1);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Quote Request:', formData);
-    navigate('/thank-you');
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          resort: resort.name
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to submit');
+      
+      navigate('/thank-you');
+    } catch (error) {
+      console.error('Error submitting lead:', error);
+      alert('There was an error submitting your request. Please try again or contact us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const steps = [
@@ -202,9 +222,17 @@ export default function RequestQuote({ resort }: RequestQuoteProps) {
                 </button>
                 <button 
                   type="submit"
-                  className="w-full md:w-auto bg-emerald-600 text-white px-16 py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20"
+                  disabled={isSubmitting}
+                  className="w-full md:w-auto bg-emerald-600 text-white px-16 py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Get My Quote Now
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    'Get My Quote Now'
+                  )}
                 </button>
               </div>
             </div>

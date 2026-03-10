@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronRight, ChevronDown, Calendar, Users, Info, Utensils, Phone, ShieldCheck, Clock, Search, MessageCircle } from 'lucide-react';
+import { Menu, X, ChevronRight, ChevronDown, Calendar, Users, Info, Utensils, Phone, ShieldCheck, Clock, Search, MessageCircle, ShoppingBag } from 'lucide-react';
 import { ResortData } from '../types';
 import { useForm } from '../context/FormContext';
+import { useInquiry } from '../context/InquiryContext';
 import ChatBot from './ChatBot';
 
 interface LayoutProps {
@@ -19,6 +20,7 @@ export default function Layout({ children, resort }: LayoutProps) {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const { showForm, setShowForm } = useForm();
+  const { items, setIsBucketOpen } = useInquiry();
   const [formStep, setFormStep] = useState(1);
   const location = useLocation();
   const navigate = useNavigate();
@@ -69,9 +71,7 @@ export default function Layout({ children, resort }: LayoutProps) {
         { name: 'Sports & Recreation', path: '/activities/sports-recreation' },
         { name: 'Secret Garden', path: '/activities/secret-garden' },
         { name: 'Zuzuu Kids Club', path: '/activities/zuzuu-kids-club' },
-        { name: 'Environmental Initiatives', path: '/activities/environmental-initiatives' },
         { name: 'Exotic Animals', path: '/activities/exotic-animals' },
-        { name: 'Resort Clinic', path: '/activities/resort-clinic' },
       ]
     },
     { name: 'All Inclusive', path: '/all-inclusive' },
@@ -137,6 +137,18 @@ export default function Layout({ children, resort }: LayoutProps) {
           </div>
           
           <div className="flex items-center gap-2 md:gap-4">
+            <button 
+              onClick={() => setIsBucketOpen(true)}
+              className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-900 transition-all"
+              aria-label="Inquiry Bucket"
+            >
+              <ShoppingBag size={18} />
+              {items.length > 0 && (
+                <span className="absolute top-1 right-1 bg-emerald-500 text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">
+                  {items.length}
+                </span>
+              )}
+            </button>
             <button 
               onClick={() => setIsSearchOpen(true)}
               className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-900 transition-all"
@@ -233,6 +245,23 @@ export default function Layout({ children, resort }: LayoutProps) {
                 )
               ))}
               <div className="pt-6 border-t border-stone-100 flex flex-col gap-4">
+                <button 
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsBucketOpen(true);
+                  }}
+                  className="flex items-center gap-2 text-stone-900 font-bold"
+                >
+                  <div className="relative">
+                    <ShoppingBag size={18} />
+                    {items.length > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-[8px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                        {items.length}
+                      </span>
+                    )}
+                  </div>
+                  Inquiry Bucket
+                </button>
                 <button 
                   onClick={() => {
                     setIsMenuOpen(false);

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Waves, Maximize, Users, ChevronRight, Star, UserCheck, ShieldCheck, Coffee, Wind, X, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Waves, Maximize, Users, ChevronRight, Star, UserCheck, ShieldCheck, Coffee, Wind, X, ArrowRight, ArrowLeft, ShoppingBag } from 'lucide-react';
 import { ResortData, RoomType } from '../types';
 import { useForm } from '../context/FormContext';
+import { useInquiry } from '../context/InquiryContext';
 
 interface RoomsProps {
   resort: ResortData;
@@ -10,6 +11,7 @@ interface RoomsProps {
 
 export default function Rooms({ resort }: RoomsProps) {
   const { setShowForm } = useForm();
+  const { addItem } = useInquiry();
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<'all' | 'beach' | 'water'>('all');
   const [selectedRoom, setSelectedRoom] = useState<RoomType | null>(null);
@@ -29,6 +31,14 @@ export default function Rooms({ resort }: RoomsProps) {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 400, behavior: 'smooth' });
+  };
+
+  const handleAddToInquiry = (room: RoomType) => {
+    addItem({
+      id: `room-${room.name.toLowerCase().replace(/\s+/g, '-')}`,
+      category: 'Rooms',
+      name: room.name,
+    });
   };
 
   return (
@@ -121,10 +131,11 @@ export default function Rooms({ resort }: RoomsProps) {
                   View Details
                 </button>
                 <button 
-                  onClick={() => navigate('/request-quote')}
-                  className="border border-stone-200 text-stone-900 px-10 py-5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-stone-50 transition-all"
+                  onClick={() => handleAddToInquiry(room)}
+                  className="bg-emerald-600 text-white px-10 py-5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/10 flex items-center justify-center gap-2"
                 >
-                  Request Quote
+                  <ShoppingBag size={14} />
+                  Add to Inquiry
                 </button>
               </div>
             </div>
@@ -216,15 +227,27 @@ export default function Rooms({ resort }: RoomsProps) {
                 </div>
               </div>
 
-              <button 
-                onClick={() => {
-                  setSelectedRoom(null);
-                  navigate('/request-quote');
-                }}
-                className="w-full bg-stone-900 text-white py-5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-stone-800 transition-all shadow-xl shadow-stone-900/20"
-              >
-                Request Quote for this Villa
-              </button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button 
+                  onClick={() => {
+                    setSelectedRoom(null);
+                    handleAddToInquiry(selectedRoom);
+                  }}
+                  className="flex-1 bg-emerald-600 text-white py-5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-2"
+                >
+                  <ShoppingBag size={14} />
+                  Add to Inquiry
+                </button>
+                <button 
+                  onClick={() => {
+                    setSelectedRoom(null);
+                    navigate('/request-quote');
+                  }}
+                  className="flex-1 bg-stone-900 text-white py-5 rounded-xl font-bold uppercase tracking-widest text-[10px] hover:bg-stone-800 transition-all shadow-xl shadow-stone-900/20"
+                >
+                  Request Quote
+                </button>
+              </div>
             </div>
           </div>
         </div>

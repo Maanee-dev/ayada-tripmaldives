@@ -1,12 +1,23 @@
 import React from 'react';
-import { Waves, Anchor, Camera, ShieldCheck, CheckCircle2, Map as MapIcon, Info, Fish, Compass } from 'lucide-react';
+import { Waves, Anchor, Camera, ShieldCheck, CheckCircle2, Map as MapIcon, Info, Fish, Compass, ShoppingBag } from 'lucide-react';
 import { ResortData } from '../../types';
+import { useInquiry } from '../../context/InquiryContext';
 
 interface DivingProps {
   resort: ResortData;
 }
 
 export default function Diving({ resort }: DivingProps) {
+  const { addItem } = useInquiry();
+
+  const handleAddToInquiry = (item: any) => {
+    addItem({
+      id: `diving-${item.name.toLowerCase().replace(/\s+/g, '-')}`,
+      category: 'Diving',
+      name: item.name,
+      price: `$${item.price}`,
+    });
+  };
   const programs = [
     {
       title: "Discover scuba diving",
@@ -166,9 +177,18 @@ export default function Diving({ resort }: DivingProps) {
                   <p className="text-stone-500 text-sm font-light leading-relaxed mb-6">
                     {program.description}
                   </p>
-                  <button className="text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-4 transition-all">
-                    Learn More <CheckCircle2 size={16} />
-                  </button>
+                  <div className="flex gap-4">
+                    <button className="flex-1 text-emerald-600 font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-4 transition-all">
+                      Learn More <CheckCircle2 size={16} />
+                    </button>
+                    <button 
+                      onClick={() => handleAddToInquiry({ name: program.title, price: 'Inquire' })}
+                      className="p-3 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white rounded-xl transition-all"
+                      title="Add to Inquiry"
+                    >
+                      <ShoppingBag size={18} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -230,10 +250,21 @@ export default function Diving({ resort }: DivingProps) {
                   {section.items.map((item, i) => (
                     <div key={i} className="group">
                       <div className="flex justify-between items-start mb-1">
-                        <span className="text-stone-800 font-medium group-hover:text-emerald-700 transition-colors">{item.name}</span>
-                        <span className="text-emerald-600 font-bold">${item.price}</span>
+                        <div className="flex-1">
+                          <span className="text-stone-800 font-medium group-hover:text-emerald-700 transition-colors">{item.name}</span>
+                          <p className="text-stone-400 text-[11px] uppercase tracking-wider">{item.info}</p>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="text-emerald-600 font-bold">${item.price}</span>
+                          <button 
+                            onClick={() => handleAddToInquiry(item)}
+                            className="p-1.5 bg-white text-stone-400 hover:bg-emerald-600 hover:text-white rounded-full transition-all shadow-sm"
+                            title="Add to Inquiry"
+                          >
+                            <ShoppingBag size={14} />
+                          </button>
+                        </div>
                       </div>
-                      <p className="text-stone-400 text-[11px] uppercase tracking-wider">{item.info}</p>
                     </div>
                   ))}
                 </div>

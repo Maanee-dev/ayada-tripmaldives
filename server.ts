@@ -2,6 +2,28 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import compression from "compression";
+import Database from "better-sqlite3";
+
+const db = new Database("leads.db");
+
+// Initialize database
+db.exec(`
+  CREATE TABLE IF NOT EXISTS leads (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    resort TEXT,
+    name TEXT,
+    email TEXT,
+    phone TEXT,
+    check_in TEXT,
+    check_out TEXT,
+    adults INTEGER,
+    children INTEGER,
+    room_type TEXT,
+    meal_plan TEXT,
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`);
 
 async function startServer() {
   const app = express();
@@ -12,16 +34,37 @@ async function startServer() {
 
   // API Routes
   app.post("/api/leads", (req, res) => {
-    const { resort, name, email, phone, dates, guests } = req.body;
-    console.log(`New Lead for ${resort}:`, { name, email, phone, dates, guests });
-    
-    // In a real app, integrate with CRM (e.g., HubSpot, Salesforce)
-    // and send to Maldives Serenity Travels backend.
-    
-    res.status(201).json({ 
-      success: true, 
-      message: "Inquiry received. A luxury travel specialist will contact you shortly." 
-    });
+    const { 
+      resort, name, email, phone, 
+      checkIn, checkOut, adults, children, 
+      roomType, mealPlan, notes 
+    } = req.body;
+
+    try {
+      const stmt = db.prepare(`
+        INSERT INTO leads (
+          resort, name, email, phone, 
+          check_in, check_out, adults, children, 
+          room_type, meal_plan, notes
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+
+      stmt.run(
+        resort, name, email, phone, 
+        checkIn, checkOut, adults, children, 
+        roomType, mealPlan, notes
+      );
+
+      console.log(`New Lead for ${resort}:`, { name, email });
+      
+      res.status(201).json({ 
+        success: true, 
+        message: "Inquiry received. A luxury travel specialist will contact you shortly." 
+      });
+    } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).json({ error: "Failed to save inquiry" });
+    }
   });
 
   app.get("/api/resort/:slug", (req, res) => {
